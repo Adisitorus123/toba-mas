@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: toba-mas-config
+  namespace: toba-mas
+data:
+  PORT: "8080"
+  NODE_ENV: "production"
+  DB_HOST: "${{ secrets.DB_HOST }}"
+  DB_PORT: "5432"
+  DB_NAME: "${{ secrets.DB_NAME }}"
+  DB_SSL: "true"
+  # BACKEND_URL menggunakan internal Kubernetes service DNS
+  # Frontend Nginx akan proxy /api/* ke backend via internal network
+  # Backend tidak di-expose langsung ke internet (tidak ada backend ingress)
+  BACKEND_URL: "http://toba-mas-backend.toba-mas.svc.cluster.local:8080"

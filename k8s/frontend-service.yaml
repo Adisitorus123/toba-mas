@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: toba-mas-frontend
+  namespace: toba-mas
+  labels:
+    app: toba-mas-frontend
+spec:
+  type: ClusterIP
+  selector:
+    app: toba-mas-frontend
+  ports:
+  - port: 80
+    targetPort: 80
+    protocol: TCP
+    name: http

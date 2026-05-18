@@ -1,0 +1,45 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: toba-mas-db-init
+  namespace: toba-mas
+  labels:
+    app: toba-mas-db-init
+spec:
+  template:
+    metadata:
+      labels:
+        app: toba-mas-db-init
+    spec:
+      restartPolicy: OnFailure
+      containers:
+      - name: db-init
+        image: postgres:15-alpine
+        command: 
+        - sh
+        - -c
+        - |
+          echo "Waiting for PostgreSQL to be ready..."
+          until pg_isready -h $DB_HOST -p $DB_PORT -U $DB_USER; do
+            echo "PostgreSQL is not ready yet. Retrying in 5 seconds..."
+            sleep 5
+          done
+          echo "PostgreSQL is ready! Running migration..."
+          psql $DATABASE_URL -f /migrations/001_init.sql
+          echo "Migration completed!"
+        envFrom:
+        - secretRef:
+            name: toba-mas-db-secret
+        - configMapRef:
+            name: toba-mas-config
+        env:
+        - name: DATABASE_URL
+          value: "postgresql://$(DB_USER):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?sslmode=require"
+        volumeMounts:
+        - name: migrations
+          mountPath: /migrations
+      volumes:
+      - name: migrations
+        configMap:
+          name: toba-mas-migrations
+  backoffLimit: 4
