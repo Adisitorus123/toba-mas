@@ -39,7 +39,7 @@ function Home() {
         <div className="container">
           <div className="vision-content">
             <span className="section-label">Visi Kami</span>
-            <h2 className="section-title">Menyatukan Kemewahan & Budaya Batak</h2>
+            <h2 className="section-title">Menyatukan Kemewahan & Budaya Batak Toba</h2>
             <p className="vision-text">
               {about?.vision || 'Menjadi pengelola destinasi wisata terintegrasi yang paling inovatif dan berkelanjutan di Asia Tenggara, dengan menonjolkan harmoni antara kemewahan modern dan autentisitas budaya Danau Toba.'}
             </p>
